@@ -1,6 +1,7 @@
 #ifndef C4_LIB_GAME_H
 #define C4_LIB_GAME_H
 
+#include <chrono>
 #include <memory>
 #include <string>
 

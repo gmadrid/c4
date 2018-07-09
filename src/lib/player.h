@@ -43,13 +43,13 @@ class LastChoicePlayer : public Player {
 
 class RandomChoicePlayer : public Player {
  public:
-  RandomChoicePlayer(absl::string_view name)
-      : Player(name),
-        rnd_(std::chrono::system_clock::now().time_since_epoch().count()) {}
+  RandomChoicePlayer(absl::string_view name,
+                     std::shared_ptr<std::default_random_engine> rnd)
+      : Player(name), rnd_(rnd) {}
   size_t ChooseMove(Board *board) const override;
 
  private:
-  mutable std::default_random_engine rnd_;
+  std::shared_ptr<std::default_random_engine> rnd_;
 };
 
 }  // namespace c4

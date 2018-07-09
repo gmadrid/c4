@@ -19,7 +19,7 @@ size_t LastChoicePlayer::ChooseMove(Board *board) const {
 size_t RandomChoicePlayer::ChooseMove(Board *board) const {
   vector<size_t> valid_moves;
   board->ValidMoves(&valid_moves);
-  return valid_moves.at(rnd_() % valid_moves.size());
+  return valid_moves.at((*rnd_)() % valid_moves.size());
 }
 
 }  // namespace c4
