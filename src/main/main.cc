@@ -13,7 +13,8 @@ int main(int argc, char *argv[]) {
   auto rnd = std::make_shared<std::default_random_engine>(
       std::chrono::system_clock::now().time_since_epoch().count());
   auto board = absl::make_unique<Board>();
-  auto yellow = absl::make_unique<c4::RandomChoicePlayer>("Yellow", rnd);
+
+  auto yellow = absl::make_unique<c4::FirstChoicePlayer>("Yellow");
   auto red = absl::make_unique<c4::RandomChoicePlayer>("Red", rnd);
 
   Game game(std::move(board), std::move(yellow), std::move(red), true);
