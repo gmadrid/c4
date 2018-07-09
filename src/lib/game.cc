@@ -64,6 +64,45 @@ void Game::CheckForWin() {
   CheckForDiagonalWin();
 }
 
+template <size_t START_ROW, int DIR>
+Board::Cell CheckForDiagonalWinInDirection(Board *board) {
+  for (size_t start_delta = 0; start_delta <= 3; ++start_delta) {
+    size_t start_row = START_ROW + start_delta;
+
+    for (size_t start_col = 0; start_col < 4; ++start_col) {
+      Board::Cell color = board->at(start_row, start_col);
+      if (color == Board::BLANK || color == Board::INVALID) {
+        continue;
+      }
+
+      size_t delta;
+      for (delta = 1; delta < 4; ++delta) {
+        if (board->at(start_row + delta * DIR, start_col + delta) != color) {
+          break;
+        }
+      }
+      if (delta == 4) {
+        return color;
+      }
+    }
+  }
+  return Board::INVALID;
+}
+
+void Game::CheckForDiagonalWin() {
+  auto color = CheckForDiagonalWinInDirection<0, 1>(board_.get());
+  if (color != Board::INVALID) {
+    winning_player_ = color;
+    return;
+  }
+
+  color = CheckForDiagonalWinInDirection<3, -1>(board_.get());
+  if (color != Board::INVALID) {
+    winning_player_ = color;
+    return;
+  }
+}
+
 void Game::CheckForVerticalWin() {
   for (size_t start_row = 0; start_row < 3; ++start_row) {
     for (size_t col = 0; col < Board::num_cols; ++col) {
@@ -85,8 +124,6 @@ void Game::CheckForVerticalWin() {
     }
   }
 }
-
-void Game::CheckForDiagonalWin() {}
 
 void Game::CheckForHorizontalWin() {
   // Check for horizontal wins.
