@@ -12,6 +12,19 @@ namespace c4 {
 using std::string;
 using std::vector;
 
+string PlayerToColor(Board::Cell cell) {
+  switch (cell) {
+    case Board::BLANK:
+      return "blank";
+    case Board::INVALID:
+      return "INVALID";
+    case Board::RED:
+      return "Red";
+    case Board::YELLOW:
+      return "Yellow";
+  }
+}
+
 string Game::to_string() const {
   return absl::StrCat(
       absl::Substitute("$0's turn\n",
@@ -47,7 +60,7 @@ bool Game::GameOver() {
 
   CheckForWin();
   if (winning_player_ != Board::INVALID) {
-    std::cout << "WINNER: " << winning_player_ << std::endl;
+    std::cout << "WINNER: " << PlayerToColor(winning_player_) << std::endl;
     return true;
   }
 
