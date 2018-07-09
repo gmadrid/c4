@@ -7,14 +7,15 @@
 
 namespace c4 {
 
-  using std::string;
-  using std::vector;
+using std::string;
+using std::vector;
 
-  string Game::to_string() const {
-    return absl::StrCat(absl::Substitute("$0's turn\n",
-					   current_player_ == Board::YELLOW ? "Yellow" : "Red"),
-			  board_->to_string());
-  }
+string Game::to_string() const {
+  return absl::StrCat(
+      absl::Substitute("$0's turn\n",
+                       current_player_ == Board::YELLOW ? "Yellow" : "Red"),
+      board_->to_string());
+}
 
 bool Game::Move() {
   vector<size_t> valid_moves;
@@ -26,10 +27,10 @@ bool Game::Move() {
   if (print_boards_) {
     std::cout << to_string() << std::endl;
   }
-  
+
   current_player_ =
-    current_player_ == Board::YELLOW ? Board::RED : Board::YELLOW;
-  
+      current_player_ == Board::YELLOW ? Board::RED : Board::YELLOW;
+
   return true;
 }
 

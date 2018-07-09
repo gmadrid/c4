@@ -8,21 +8,21 @@
 
 namespace c4 {
 
-  class Game {
-  public:
-    Game(std::unique_ptr<Board>&& board, bool print_boards = false)
-      : board_(std::move(board)), print_boards_(print_boards) {};
+class Game {
+ public:
+  Game(std::unique_ptr<Board>&& board, bool print_boards = false)
+      : board_(std::move(board)), print_boards_(print_boards){};
 
-    bool Move();
-    bool GameOver() const;
+  bool Move();
+  bool GameOver() const;
 
-    std::string to_string() const;
-    
-  private:
-    Board::Cell current_player_ = Board::YELLOW;
-    std::unique_ptr<Board> board_;
-    bool print_boards_;
-  };
+  std::string to_string() const;
+
+ private:
+  Board::Cell current_player_ = Board::YELLOW;
+  std::unique_ptr<Board> board_;
+  bool print_boards_;
+};
 
 }  // namespace c4
 
