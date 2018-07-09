@@ -9,15 +9,17 @@ namespace c4 {
 class MinimaxChooser {
  public:
   size_t operator()(Board *board) {
-    std::vector<size_t> valid_moves;
-    board->ValidMoves(&valid_moves);
-    return valid_moves.at(valid_moves.size() / 2);
+    auto result = minimax(board, 5, true, Board::YELLOW); // THIS IS WRONG!
+    return result.first;
+    //    std::vector<size_t> valid_moves;
+    //    board->ValidMoves(&valid_moves);
+    //    return valid_moves.at(valid_moves.size() / 2);
   }
 
  private:
-  std::pair<size_t, double> minimax(Board *board, size_t max_depth, bool maximize) {
-    
-  }
+  std::pair<size_t, double> minimax(Board *board, size_t max_depth,
+                                    bool maximize,
+                                    Board::Cell maximizing_color);
 };
 
 using MinimaxPlayer = BasicPlayer<MinimaxChooser>;

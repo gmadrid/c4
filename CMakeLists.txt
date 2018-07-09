@@ -39,7 +39,9 @@ add_subdirectory(${abseil_SOURCE_DIR} ${abseil_BINARY_DIR})
 add_library(c4_lib
 	src/lib/board.cc
 	src/lib/game.cc
+	src/lib/minimax.cc
 	src/lib/player.cc
+	src/lib/win_finder.cc
 )
 target_link_libraries(c4_lib
   PUBLIC
