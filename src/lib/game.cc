@@ -12,6 +12,8 @@ namespace c4 {
 using std::string;
 using std::vector;
 
+  constexpr vector<pair<int, int>> = {};
+
 string Game::to_string() const {
   return absl::StrCat(
       absl::Substitute("$0's turn\n",
@@ -38,10 +40,23 @@ bool Game::Move() {
   return true;
 }
 
-bool Game::GameOver() const {
+bool Game::GameOver() {
   vector<size_t> valid_moves;
   board_->ValidMoves(&valid_moves);
-  return valid_moves.empty();
+  if (valid_moves.empty()) {
+    return true;
+  }
+
+  CheckForWin();
+  if (winning_player_ != Board::INVALID) {
+    return true;
+  }
+
+  return false;
 }
+
+  void Game::CheckForWin() {
+    
+  }
 
 }  // namespace c4

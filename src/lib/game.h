@@ -23,18 +23,20 @@ class Game {
   };
 
   bool Move();
-  bool GameOver() const;
+  bool GameOver();
 
   std::string to_string() const;
 
  private:
   Player* CurrentPlayer() const;
+  void CheckForWin();
 
   Board::Cell current_player_ = Board::YELLOW;
   std::unique_ptr<Board> board_;
   std::unique_ptr<Player> yellow_player_;
   std::unique_ptr<Player> red_player_;
   bool print_boards_;
+  Board::Cell winning_player_ = Board::INVALID;
 };
 
 }  // namespace c4
