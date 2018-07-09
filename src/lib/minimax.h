@@ -13,6 +13,11 @@ class MinimaxChooser {
     board->ValidMoves(&valid_moves);
     return valid_moves.at(valid_moves.size() / 2);
   }
+
+ private:
+  std::pair<size_t, double> minimax(Board *board, size_t max_depth, bool maximize) {
+    
+  }
 };
 
 using MinimaxPlayer = BasicPlayer<MinimaxChooser>;
