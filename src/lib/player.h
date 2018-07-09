@@ -30,11 +30,11 @@ class Player {
   Board::Cell color_ = Board::INVALID;
 };
 
-template <typename C>
+template <typename C, typename... CARGS>
 class BasicPlayer : public Player {
  public:
- BasicPlayer(absl::string_view name) : Player(name) {}
- BasicPlayer(absl::string_view name, C chooser) : Player(name), chooser_(chooser) {}
+  BasicPlayer(absl::string_view name, CARGS... chooser_args)
+      : Player(name), chooser_(chooser_args...) {}
   size_t ChooseMove(Board *board) override { return chooser_(board); }
 
  protected:
@@ -59,27 +59,25 @@ class LastChoiceChooser {
   }
 };
 
- class RandomChoiceChooser {
+class RandomChoiceChooser {
  public:
- RandomChoiceChooser(std::shared_ptr<std::default_random_engine> rnd) : rnd_(rnd) {}
-   size_t operator()(Board *board) {
-     std::vector<size_t> valid_moves;
-     board->ValidMoves(&valid_moves);
-     return valid_moves.at((*rnd_)() % valid_moves.size());
-   }
+  RandomChoiceChooser(std::shared_ptr<std::default_random_engine> rnd)
+      : rnd_(rnd) {}
+  size_t operator()(Board *board) {
+    std::vector<size_t> valid_moves;
+    board->ValidMoves(&valid_moves);
+    return valid_moves.at((*rnd_)() % valid_moves.size());
+  }
+
  private:
-   std::shared_ptr<std::default_random_engine> rnd_;
- };
+  std::shared_ptr<std::default_random_engine> rnd_;
+};
 
- using FirstChoicePlayer = BasicPlayer<FirstChoiceChooser>;
- using LastChoicePlayer = BasicPlayer<LastChoiceChooser>;
-
- class RandomChoicePlayer : public BasicPlayer<RandomChoiceChooser> {
- public:
-   RandomChoicePlayer(absl::string_view name,
-		      std::shared_ptr<std::default_random_engine> rnd)
-     : BasicPlayer(name, RandomChoiceChooser(rnd)) {}
- };
+using FirstChoicePlayer = BasicPlayer<FirstChoiceChooser>;
+using LastChoicePlayer = BasicPlayer<LastChoiceChooser>;
+using RandomChoicePlayer =
+    BasicPlayer<RandomChoiceChooser,
+                std::shared_ptr<std::default_random_engine>>;
 
 }  // namespace c4
 

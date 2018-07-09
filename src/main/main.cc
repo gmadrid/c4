@@ -5,6 +5,8 @@
 
 #include "../lib/board.h"
 #include "../lib/game.h"
+#include "../lib/minimax.h"
+#include "../lib/player.h"
 
 using c4::Board;
 using c4::Game;
@@ -14,8 +16,8 @@ int main(int argc, char *argv[]) {
       std::chrono::system_clock::now().time_since_epoch().count());
   auto board = absl::make_unique<Board>();
 
-  auto yellow = absl::make_unique<c4::FirstChoicePlayer>("Yellow");
-  auto red = absl::make_unique<c4::RandomChoicePlayer>("Red", rnd);
+  auto yellow = absl::make_unique<c4::RandomChoicePlayer>("Yellow", rnd);
+  auto red = absl::make_unique<c4::MinimaxPlayer>("Red");
 
   Game game(std::move(board), std::move(yellow), std::move(red), true);
 
