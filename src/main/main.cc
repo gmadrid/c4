@@ -11,12 +11,14 @@ using c4::Game;
 
 int main(int argc, char *argv[]) {
   auto board = absl::make_unique<Board>();
-  Game game(std::move(board), true);
+  auto yellow = absl::make_unique<c4::RandomChoicePlayer>("Yellow");
+  auto red = absl::make_unique<c4::RandomChoicePlayer>("Red");
+
+  Game game(std::move(board), std::move(yellow), std::move(red), true);
 
   while (!game.GameOver()) {
     game.Move();
   }
-  std::cout << game.to_string() << std::endl;
 
   return 0;
 }

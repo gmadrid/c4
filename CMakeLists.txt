@@ -1,5 +1,6 @@
 project(c4)
 cmake_minimum_required(VERSION 3.11)
+set(CMAKE_BUILD_TYPE Debug)
 
 include(cmake/DownloadProject.cmake)
 
@@ -38,6 +39,7 @@ add_subdirectory(${abseil_SOURCE_DIR} ${abseil_BINARY_DIR})
 add_library(c4_lib
 	src/lib/board.cc
 	src/lib/game.cc
+	src/lib/player.cc
 )
 target_link_libraries(c4_lib
   PUBLIC

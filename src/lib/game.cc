@@ -5,6 +5,8 @@
 #include "absl/strings/str_cat.h"
 #include "absl/strings/substitute.h"
 
+#include "player.h"
+
 namespace c4 {
 
 using std::string;
@@ -17,11 +19,13 @@ string Game::to_string() const {
       board_->to_string());
 }
 
-bool Game::Move() {
-  vector<size_t> valid_moves;
-  board_->ValidMoves(&valid_moves);
+Player *Game::CurrentPlayer() const {
+  return current_player_ == Board::YELLOW ? yellow_player_.get()
+                                          : red_player_.get();
+}
 
-  size_t move = valid_moves.front();
+bool Game::Move() {
+  auto move = CurrentPlayer()->ChooseMove(board_.get());
   board_->Move(move, current_player_);
 
   if (print_boards_) {
