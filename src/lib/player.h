@@ -35,7 +35,7 @@ class BasicPlayer : public Player {
  public:
   BasicPlayer(absl::string_view name, CARGS... chooser_args)
       : Player(name), chooser_(chooser_args...) {}
-  size_t ChooseMove(Board *board) override { return chooser_(board); }
+  size_t ChooseMove(Board *board) override { return chooser_(board, color_); }
 
  protected:
   C chooser_;
@@ -43,7 +43,7 @@ class BasicPlayer : public Player {
 
 class FirstChoiceChooser {
  public:
-  size_t operator()(Board *board) {
+  size_t operator()(Board *board, Board::Cell color) {
     std::vector<size_t> valid_moves;
     board->ValidMoves(&valid_moves);
     return valid_moves.front();
@@ -52,7 +52,7 @@ class FirstChoiceChooser {
 
 class LastChoiceChooser {
  public:
-  size_t operator()(Board *board) {
+  size_t operator()(Board *board, Board::Cell color) {
     std::vector<size_t> valid_moves;
     board->ValidMoves(&valid_moves);
     return valid_moves.back();
@@ -63,7 +63,7 @@ class RandomChoiceChooser {
  public:
   RandomChoiceChooser(std::shared_ptr<std::default_random_engine> rnd)
       : rnd_(rnd) {}
-  size_t operator()(Board *board) {
+  size_t operator()(Board *board, Board::Cell color) {
     std::vector<size_t> valid_moves;
     board->ValidMoves(&valid_moves);
     return valid_moves.at((*rnd_)() % valid_moves.size());

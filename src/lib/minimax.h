@@ -8,8 +8,8 @@ namespace c4 {
 
 class MinimaxChooser {
  public:
-  size_t operator()(Board *board) {
-    auto result = minimax(board, 5, true, Board::YELLOW); // THIS IS WRONG!
+  size_t operator()(Board *board, Board::Cell color) {
+    auto result = minimax(board, 5, true, color); // THIS IS WRONG!
     return result.first;
     //    std::vector<size_t> valid_moves;
     //    board->ValidMoves(&valid_moves);

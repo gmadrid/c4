@@ -29,10 +29,10 @@ class Game {
 
  private:
   Player* CurrentPlayer() const;
-  void CheckForWin();
-  void CheckForHorizontalWin();
-  void CheckForVerticalWin();
-  void CheckForDiagonalWin();
+  //  void CheckForWin();
+  //  void CheckForHorizontalWin();
+  //  void CheckForVerticalWin();
+  //  void CheckForDiagonalWin();
 
   Board::Cell current_player_ = Board::YELLOW;
   std::unique_ptr<Board> board_;
