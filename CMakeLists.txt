@@ -7,11 +7,11 @@ include(cmake/DownloadProject.cmake)
 ###
 ### gtest
 ###
-# download_project(PROJ                googletest
-# 		 GIT_REPOSITORY      https://github.com/google/googletest.git
-# 		 GIT_TAG             master
-# 		 UPDATE_DISCONNECTED 1)
-# add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})		
+download_project(PROJ                googletest
+		 GIT_REPOSITORY      https://github.com/google/googletest.git
+		 GIT_TAG             master
+		 UPDATE_DISCONNECTED 1)
+add_subdirectory(${googletest_SOURCE_DIR} ${googletest_BINARY_DIR})		
 
 ###
 ### abseil
@@ -82,18 +82,16 @@ target_link_libraries(c4
 ### unittests
 ###
 enable_testing()
-#add_executable(unit_tests
-#  src/test/leitner_box_test.cc
-  # src/test/mnemonica_test.cc
-  # src/test/question_test.cc
-  # src/test/schedule_test.cc
-#  )
+add_executable(unit_tests
+  src/test/board_test.cc
+  src/test/minimax_test.cc
+)
 
-# target_link_libraries(unit_tests
-#   PRIVATE
-#     c4_lib
-# #    gtest
-# #    gtest_main
-#     )
-# add_test(NAME    c4_test
-# 	 COMMAND unit_tests)
+target_link_libraries(unit_tests
+  PRIVATE
+    c4_lib
+    gtest
+    gtest_main
+ )
+add_test(NAME    c4_test
+	 COMMAND unit_tests)

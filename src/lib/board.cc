@@ -1,11 +1,42 @@
 #include "board.h"
 
+#include <algorithm>
+
 namespace c4 {
 
 using std::string;
 using std::vector;
 
 Board::Board() { Reset(); }
+
+Board::Board(char const* str, size_t sz) {
+  size_t pos = 0;
+  for (size_t i = 0; i < sz; ++i) {
+    switch (str[i]) {
+      case '.':
+        assert(pos < num_rows * num_cols);
+        cells_[pos++] = Board::BLANK;
+        break;
+      case 'X':
+        assert(pos < num_rows * num_cols);
+        cells_[pos++] = Board::RED;
+        break;
+      case 'O':
+        assert(pos < num_rows * num_cols);
+        cells_[pos++] = Board::YELLOW;
+        break;
+    }
+  }
+  assert(pos == num_rows * num_cols);
+
+  // Now swap rows 0 & 5, 1 & 4, 2 & 3.
+  auto cbegin = cells_.begin();
+  std::swap_ranges(cbegin + 0, cbegin + 0 + num_cols, cbegin + 5 * num_cols);
+  std::swap_ranges(cbegin + 1 * num_cols, cbegin + 2 * num_cols,
+                   cbegin + 4 * num_cols);
+  std::swap_ranges(cbegin + 2 * num_cols, cbegin + 3 * num_cols,
+                   cbegin + 3 * num_cols);
+}
 
 string Board::to_string() const {
   string val;
@@ -63,6 +94,16 @@ bool Board::Move(size_t col, Cell color) {
   }
   assert(false);
   return false;
+}
+
+void Board::Unmove(size_t col) {
+  for (int i = num_rows - 1; i >= 0; --i) {
+    auto val = at(i, col);
+    if (val == Board::RED || val == Board::YELLOW) {
+      cells_[i * num_cols + col] = Board::BLANK;
+      return;
+    }
+  }
 }
 
 }  // namespace c4

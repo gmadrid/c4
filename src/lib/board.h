@@ -18,7 +18,8 @@ class Board {
   // First character is (5, 0), last character is (0, 6), so the ASCII rep
   // will look like the board it represents (if it has LF at the end of each
   // line).
-  Board(absl::string_view board_rep);
+  Board(char const *str, size_t sz);
+  //  Board(absl::string_view board_rep);
   std::string to_string() const;
 
   Board(const Board &) = default;
@@ -37,11 +38,13 @@ class Board {
   };
 
   // Returned value is only valid until first Board mutation.
-  void ValidMoves(std::vector<size_t> *) const;
+  using MoveList = std::vector<size_t>;
+  void ValidMoves(MoveList *) const;
   Cell at(size_t row, size_t col) const;
 
   void Reset();
   bool Move(size_t col, Cell color);
+  void Unmove(size_t col);
 
  private:
   // row-major list of Cells.
@@ -50,5 +53,9 @@ class Board {
 };
 
 }  // namespace c4
+
+inline c4::Board operator""_board(char const *str, size_t sz) {
+  return c4::Board(str, sz);
+}
 
 #endif  // C4_LIB_BOARD_H

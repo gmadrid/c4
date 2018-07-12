@@ -17,6 +17,7 @@ int main(int argc, char *argv[]) {
   auto board = absl::make_unique<Board>();
 
   auto yellow = absl::make_unique<c4::RandomChoicePlayer>("Yellow", rnd);
+  //  auto yellow = absl::make_unique<c4::MinimaxPlayer>("Yellow");
   auto red = absl::make_unique<c4::MinimaxPlayer>("Red");
 
   Game game(std::move(board), std::move(yellow), std::move(red), true);

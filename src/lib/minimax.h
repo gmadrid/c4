@@ -6,20 +6,21 @@
 
 namespace c4 {
 
+constexpr size_t DEFAULT_DEPTH = 8;
 class MinimaxChooser {
  public:
+  MinimaxChooser(size_t depth = DEFAULT_DEPTH) : depth_(depth) {}
+
   size_t operator()(Board *board, Board::Cell color) {
-    auto result = minimax(board, 5, true, color); // THIS IS WRONG!
-    return result.first;
-    //    std::vector<size_t> valid_moves;
-    //    board->ValidMoves(&valid_moves);
-    //    return valid_moves.at(valid_moves.size() / 2);
+    size_t move;
+    auto result = minimax(board, depth_, color, &move);
+    return move;
   }
 
  private:
-  std::pair<size_t, double> minimax(Board *board, size_t max_depth,
-                                    bool maximize,
-                                    Board::Cell maximizing_color);
+  double minimax(Board *board, size_t max_depth, Board::Cell current_color,
+                 size_t *chosen_move);
+  size_t depth_;
 };
 
 using MinimaxPlayer = BasicPlayer<MinimaxChooser>;
