@@ -14,21 +14,25 @@ Board::Board(char const* str, size_t sz) {
   for (size_t i = 0; i < sz; ++i) {
     switch (str[i]) {
       case '.':
-        assert(pos < num_rows * num_cols);
+        assert(pos < total_cells);
         cells_[pos++] = Board::BLANK;
         break;
       case 'X':
-        assert(pos < num_rows * num_cols);
+        assert(pos < total_cells);
         cells_[pos++] = Board::RED;
         break;
       case 'O':
-        assert(pos < num_rows * num_cols);
+        assert(pos < total_cells);
         cells_[pos++] = Board::YELLOW;
         break;
     }
   }
-  assert(pos == num_rows * num_cols);
+  assert(pos == total_cells);
 
+  ReverseTopToBottom();
+}
+
+void Board::ReverseTopToBottom() {
   // Now swap rows 0 & 5, 1 & 4, 2 & 3.
   auto cbegin = cells_.begin();
   std::swap_ranges(cbegin + 0, cbegin + 0 + num_cols, cbegin + 5 * num_cols);
@@ -42,11 +46,12 @@ string Board::to_string() const {
   string val;
   val.reserve((num_rows + 1) * num_cols);
 
-  size_t row = num_rows;
-  do {
-    row--;
-    for (size_t col = 0; col < num_cols; ++col) {
-      Cell cell = at(row, col);
+  Board other(*this);
+  other.ReverseTopToBottom();
+
+  for (auto row : RowIndex(0).range()) {
+    for (auto col : ColIndex(0).range()) {
+      Cell cell = other.at(row, col);
       char ch = '.';
       if (cell == YELLOW)
         ch = 'O';
@@ -55,7 +60,7 @@ string Board::to_string() const {
       val.push_back(ch);
     }
     val.push_back('\n');
-  } while (row > 0);
+  }
   return val;
 }
 
@@ -65,30 +70,24 @@ void Board::Reset() {
   }
 }
 
-Board::Cell Board::at(size_t row, size_t col) const {
-  if (row >= num_rows || col >= num_cols) return INVALID;
-
-  return cells_[row * num_cols + col];
-}
-
-void Board::ValidMoves(std::vector<size_t>* valid_moves) const {
+void Board::ValidMoves(MoveList* valid_moves) const {
   assert(valid_moves != nullptr);
   valid_moves->clear();
-  for (size_t col = 0; col < num_cols; ++col) {
-    if (at(num_rows - 1, col) == BLANK) {
+  RowIndex top_row(num_rows - 1);
+  for (auto col : ColIndex(0).range()) {
+    if (at(top_row, col) == BLANK) {
       valid_moves->push_back(col);
     }
   }
 }
 
-bool Board::Move(size_t col, Cell color) {
+bool Board::Move(ColIndex col, Cell color) {
   assert(color == RED || color == YELLOW);
-  assert(col < num_cols);
-  if (at(num_rows - 1, col) != BLANK) return false;
+  if (at(RowIndex(num_rows - 1), col) != BLANK) return false;
 
-  for (size_t row = 0; row < num_rows; ++row) {
+  for (auto row : RowIndex(0).range()) {
     if (at(row, col) == BLANK) {
-      cells_[row * num_cols + col] = color;
+      mutable_at(row, col) = color;
       return true;
     }
   }
@@ -96,11 +95,12 @@ bool Board::Move(size_t col, Cell color) {
   return false;
 }
 
-void Board::Unmove(size_t col) {
+void Board::Unmove(ColIndex col) {
   for (int i = num_rows - 1; i >= 0; --i) {
-    auto val = at(i, col);
+    RowIndex row(i);
+    auto val = at(row, col);
     if (val == Board::RED || val == Board::YELLOW) {
-      cells_[i * num_cols + col] = Board::BLANK;
+      mutable_at(row, col) = Board::BLANK;
       return;
     }
   }

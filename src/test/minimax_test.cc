@@ -18,7 +18,7 @@ TEST(Minimax, BasicWin) {
 
   MinimaxChooser chooser(2);
   auto ymove = chooser(&board, Board::YELLOW);
-  EXPECT_EQ(3, ymove);
+  EXPECT_EQ(ColIndex(3), ymove);
 }
 
 TEST(Minimax, BasicDefense) {
@@ -32,7 +32,7 @@ TEST(Minimax, BasicDefense) {
 
   MinimaxChooser chooser(2);
   auto rmove = chooser(&board, Board::RED);
-  EXPECT_EQ(3, rmove);
+  EXPECT_EQ(ColIndex(3), rmove);
 }
 
 TEST(Minimax, OffenceBeforeDefense) {
@@ -46,19 +46,28 @@ TEST(Minimax, OffenceBeforeDefense) {
 
   MinimaxChooser chooser(3);
   auto ymove = chooser(&board, Board::YELLOW);
-  EXPECT_EQ(3, ymove);
+  EXPECT_EQ(ColIndex(3), ymove);
 
   auto rmove = chooser(&board, Board::RED);
-  EXPECT_EQ(6, rmove);
+  EXPECT_EQ(ColIndex(6), rmove);
+}
+
+TEST(Minimax, Bug1) {
+  // Why doesn't this choose Col 4?
+  auto board =
+      "O......"
+      "X......"
+      "O......"
+      "X......"
+      "XXOO.O."
+      "XXOXOO."_board;
+  // If depth is 7, this test passes. It breaks at 8, though.
+  // However, given any search depth, any move for X but C4 will lose.
+  MinimaxChooser chooser(8);
+  auto rmove = chooser(&board, Board::YELLOW);
+  EXPECT_EQ(ColIndex(4), rmove);
+  std::cout << rmove.to_size_t() << std::endl;
 }
 
 }  // namespace tests
 }  // namespace c4
-
-// Why doesn't X block O's win on col 6?
-// X......
-// O......
-// X......
-// X......
-// O.XOOO.
-// X.XOOOX

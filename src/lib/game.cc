@@ -53,7 +53,7 @@ bool Game::Move() {
 }
 
 bool Game::GameOver() {
-  vector<size_t> valid_moves;
+  Board::MoveList valid_moves;
   board_->ValidMoves(&valid_moves);
   if (valid_moves.empty()) {
     return true;

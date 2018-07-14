@@ -57,6 +57,7 @@ target_compile_features(c4_lib
     cxx_nullptr
     cxx_override
     cxx_range_for
+    cxx_return_type_deduction
     cxx_rvalue_references
 )
 
@@ -82,9 +83,11 @@ target_link_libraries(c4
 ### unittests
 ###
 enable_testing()
-add_executable(unit_tests
+add_executable(unit_tests#
   src/test/board_test.cc
+  src/test/index_test.cc
   src/test/minimax_test.cc
+  src/test/win_finder_test.cc
 )
 
 target_link_libraries(unit_tests

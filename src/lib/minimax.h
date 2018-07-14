@@ -1,6 +1,10 @@
 #ifndef C4_LIB_MINIMAX_H
 #define C4_LIB_MINIMAX_H
 
+#include <limits>
+
+#include "absl/types/optional.h"
+
 #include "board.h"
 #include "player.h"
 
@@ -11,15 +15,19 @@ class MinimaxChooser {
  public:
   MinimaxChooser(size_t depth = DEFAULT_DEPTH) : depth_(depth) {}
 
-  size_t operator()(Board *board, Board::Cell color) {
-    size_t move;
-    auto result = minimax(board, depth_, color, &move);
-    return move;
+  ColIndex operator()(Board *board, Board::Cell color) {
+    auto result = minimax(board, depth_, std::numeric_limits<double>::lowest(),
+                          std::numeric_limits<double>::max(), color);
+    return *result.first;
   }
 
  private:
-  double minimax(Board *board, size_t max_depth, Board::Cell current_color,
-                 size_t *chosen_move);
+  using MinimaxResult =
+      std::pair<absl::optional<ColIndex>,  // The proposed move.
+                double>;                   // It's eval score.
+
+  MinimaxResult minimax(Board *board, size_t max_depth, double alpha,
+                        double beta, Board::Cell current_color);
   size_t depth_;
 };
 

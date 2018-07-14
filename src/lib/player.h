@@ -15,7 +15,7 @@ class Player {
  public:
   Player(absl::string_view name) /*: name_(name)*/ {};
 
-  virtual size_t ChooseMove(Board *board) = 0;
+  virtual ColIndex ChooseMove(Board *board) = 0;
 
   Board::Cell Color() const { return color_; };
   void SetColor(Board::Cell color) {
@@ -35,7 +35,7 @@ class BasicPlayer : public Player {
  public:
   BasicPlayer(absl::string_view name, CARGS... chooser_args)
       : Player(name), chooser_(chooser_args...) {}
-  size_t ChooseMove(Board *board) override { return chooser_(board, color_); }
+  ColIndex ChooseMove(Board *board) override { return chooser_(board, color_); }
 
  protected:
   C chooser_;
@@ -43,8 +43,8 @@ class BasicPlayer : public Player {
 
 class FirstChoiceChooser {
  public:
-  size_t operator()(Board *board, Board::Cell color) {
-    std::vector<size_t> valid_moves;
+  ColIndex operator()(Board *board, Board::Cell color) {
+    Board::MoveList valid_moves;
     board->ValidMoves(&valid_moves);
     return valid_moves.front();
   }
@@ -52,8 +52,8 @@ class FirstChoiceChooser {
 
 class LastChoiceChooser {
  public:
-  size_t operator()(Board *board, Board::Cell color) {
-    std::vector<size_t> valid_moves;
+  ColIndex operator()(Board *board, Board::Cell color) {
+    Board::MoveList valid_moves;
     board->ValidMoves(&valid_moves);
     return valid_moves.back();
   }
@@ -63,8 +63,8 @@ class RandomChoiceChooser {
  public:
   RandomChoiceChooser(std::shared_ptr<std::default_random_engine> rnd)
       : rnd_(rnd) {}
-  size_t operator()(Board *board, Board::Cell color) {
-    std::vector<size_t> valid_moves;
+  ColIndex operator()(Board *board, Board::Cell color) {
+    Board::MoveList valid_moves;
     board->ValidMoves(&valid_moves);
     return valid_moves.at((*rnd_)() % valid_moves.size());
   }
