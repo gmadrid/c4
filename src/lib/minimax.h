@@ -1,6 +1,7 @@
 #ifndef C4_LIB_MINIMAX_H
 #define C4_LIB_MINIMAX_H
 
+#include <deque>
 #include <limits>
 
 #include "absl/types/optional.h"
@@ -18,12 +19,13 @@ class MinimaxChooser {
   ColIndex operator()(Board *board, Board::Cell color) {
     auto result = minimax(board, depth_, std::numeric_limits<double>::lowest(),
                           std::numeric_limits<double>::max(), color);
-    return *result.first;
+    return result.first.front();
   }
 
  private:
+  using MoveList = std::deque<ColIndex>;
   using MinimaxResult =
-      std::pair<absl::optional<ColIndex>,  // The proposed move.
+    std::pair<MoveList,  // Moves arriving at score.
                 double>;                   // It's eval score.
 
   MinimaxResult minimax(Board *board, size_t max_depth, double alpha,

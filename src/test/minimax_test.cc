@@ -64,10 +64,11 @@ TEST(Minimax, Bug1) {
   // If depth is 7, this test passes. It breaks at 8, though.
   // However, given any search depth, any move for X but C4 will lose.
   MinimaxChooser chooser(8);
-  auto rmove = chooser(&board, Board::YELLOW);
+  auto rmove = chooser(&board, Board::RED);
   EXPECT_EQ(ColIndex(4), rmove);
   std::cout << rmove.to_size_t() << std::endl;
 }
 
 }  // namespace tests
 }  // namespace c4
+
