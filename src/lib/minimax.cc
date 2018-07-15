@@ -71,7 +71,7 @@ MinimaxChooser::MinimaxResult MinimaxChooser::minimax(
       }
     }
     if (max_depth == 8 || max_depth == 7) {
-      D(absl::Substitute("at depth $0:\n$1", max_depth, board->to_string()));
+      D("at depth $0:\n$1", max_depth, board->to_string());
        auto s = absl::StrJoin(candidates, "\n ", [](std::string* out, auto pr)
        {
 	 auto moves = absl::StrJoin(pr.first, ":", [](std::string* out, auto col) {
@@ -104,7 +104,7 @@ MinimaxChooser::MinimaxResult MinimaxChooser::minimax(
 			   return false;
                          });
     if (max_depth == 8 || max_depth == 7) {
-    D(absl::Substitute("Max Chose: $1/$0", p->second, p->first.front().to_size_t()));    
+    D("Max Chose: $1/$0", p->second, p->first.front().to_size_t());    
     }
     return *p;
   } else {
@@ -124,7 +124,7 @@ MinimaxChooser::MinimaxResult MinimaxChooser::minimax(
       }
     }
     if (max_depth == 8 || max_depth == 7) {
-      D(absl::Substitute("at depth $0:\n$1", max_depth, board->to_string()));
+      D("at depth $0:\n$1", max_depth, board->to_string());
        auto s = absl::StrJoin(candidates, "\n ", [](std::string* out, auto pr)
        {
 	 auto moves = absl::StrJoin(pr.first, ":", [](std::string* out, auto col) {
@@ -146,7 +146,7 @@ MinimaxChooser::MinimaxResult MinimaxChooser::minimax(
 			   // return false;
                          });
     if (max_depth == 8 || max_depth == 7) {
-    D(absl::Substitute("Min Chose: $1/$0", p->second, p->first.front().to_size_t()));
+    D("Min Chose: $1/$0", p->second, p->first.front().to_size_t());
     }
     return *p;
   }
