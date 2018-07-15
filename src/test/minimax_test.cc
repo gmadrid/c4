@@ -71,4 +71,3 @@ TEST(Minimax, Bug1) {
 
 }  // namespace tests
 }  // namespace c4
-

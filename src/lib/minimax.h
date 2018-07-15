@@ -24,9 +24,8 @@ class MinimaxChooser {
 
  private:
   using MoveList = std::deque<ColIndex>;
-  using MinimaxResult =
-    std::pair<MoveList,  // Moves arriving at score.
-                double>;                   // It's eval score.
+  using MinimaxResult = std::pair<MoveList,  // Moves arriving at score.
+                                  double>;   // It's eval score.
 
   MinimaxResult minimax(Board *board, size_t max_depth, double alpha,
                         double beta, Board::Cell current_color);
